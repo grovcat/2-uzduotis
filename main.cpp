@@ -4,7 +4,7 @@
 #include <vector>
 #include <stdlib.h>
 #include <time.h>
-
+#include <fstream>
 
 using std::cout;
 using std::cin;
@@ -17,6 +17,7 @@ using std::sort;
 using std::setprecision;
 using std::fixed;
 using std::vector;
+using std::string;
 
 struct Student
 {
@@ -31,6 +32,29 @@ int generateRandom()
 {
     int random;
     random = 9 * rand()/RAND_MAX + 1;
+}
+
+double vidCalc(vector<int> hw, int exam, int n)
+{
+    int temp = 0;
+    for(int i = 0; i != n; i++)
+    {
+        temp += hw[i];
+    }
+    return 0.4 * (double)(temp / n) + 0.6 * exam;
+}
+
+double medCalc(vector<int> hw, int exam, int n)
+{
+    sort(hw.begin(), hw.end());
+    if(n % 2 == 1)
+    {
+        return 0.4 * (double)hw[n / 2] + 0.6 * exam;
+    }
+    else
+    {
+        return 0.4 * (double)((hw[n / 2 - 1] + hw[n / 2]) / 2) + 0.6 * exam;
+    }
 }
 
 void addData(vector<Student> &student, int n, bool ifRandom)
@@ -68,70 +92,105 @@ void addData(vector<Student> &student, int n, bool ifRandom)
     }
 }
 
-double vidCalc(vector<int> hw, int exam, int n)
+void addDataFromFile(vector<Student> &student, int &n)
 {
-    int temp = 0;
-    for(int i = 0; i != n; i++)
+    std::ifstream fd("kursiokai.txt");
+    string temp;
+    std::getline(fd, temp);
+    n = (temp.size() - 44) / 5;
+    int k = 0;
+    int tempMark;
+    while(fd.peek() != EOF)
     {
-        temp += hw[i];
+        student.push_back(Student());
+        fd >> student[k].name >> student[k].surname;
+        for(int i = 0; i != n; i++)
+        {
+            fd >> tempMark;
+            student[k].hw.push_back(tempMark);
+        }
+        fd >> student[k].exam;
+        student[k].vid = vidCalc(student[k].hw, student[k].exam, n);
+        student[k].med = medCalc(student[k].hw, student[k].exam, n);
+        k++;
     }
-    return 0.4 * (double)(temp / n) + 0.6 * exam;
 }
 
-double medCalc(vector<int> hw, int exam, int n)
+void print(vector<Student> &student, int n, bool ifFileUsed)
 {
-    sort(hw.begin(), hw.end());
-    if(n % 2 == 1)
+    int k = student.size(); 
+    if(ifFileUsed == false)
     {
-        return 0.4 * (double)hw[n / 2] + 0.6 * exam;
-    }
+        cout << left << setw(15) << "Vardas" << left << setw(20) << "Pavarde" << "Galutinis (Vid.) / Galutinis (Med.)" << endl;
+        for(int i =0; i != 72; i++)
+        {
+            cout << "-";
+        }
+        cout << endl;
+        int vid, med;
+        for(int i = 0; i != k; i++)
+        {
+            cout << left << setw(15) << student[i].name << left << setw(20) << student[i].surname;
+            cout << left << setw(19) << fixed << setprecision(2) << student[i].vid;
+            cout << left << setw(16) << fixed << setprecision(2) << student[i].med << endl;
+        }
+    }  
     else
     {
-        return 0.4 * (double)((hw[n / 2 - 1] + hw[n / 2]) / 2) + 0.6 * exam;
+        std::ofstream result("rezultatai.txt");
+        result << left << setw(15) << "Vardas" << left << setw(20) << "Pavarde" << "Galutinis (Vid.) / Galutinis (Med.)" << endl;
+        for(int i =0; i != 72; i++)
+        {
+            result << "-";
+        }
+        result << endl;
+        int vid, med;
+        for(int i = 0; i != k; i++)
+        {
+            result << left << setw(15) << student[i].name << left << setw(20) << student[i].surname;
+            result << left << setw(19) << fixed << setprecision(2) << student[i].vid;
+            result << left << setw(16) << fixed << setprecision(2) << student[i].med << endl;
+        }
     }
 }
 
-void print(vector<Student> &student, int n) 
-{
-    int k = student.size();   
-    cout << left << setw(15) << "Vardas" << left << setw(20) << "Pavarde" << "Galutinis (Vid.) / Galutinis (Med.)" << endl;
-    for(int i =0; i != 72; i++)
-    {
-        cout << "-";
-    }
-    cout << endl;
-    int vid, med;
-    for(int i = 0; i != k; i++)
-    {
-        cout << left << setw(15) << student[i].name << left << setw(20) << student[i].surname;
-        cout << left << setw(19) << fixed << setprecision(2) << student[i].vid;
-        cout << left << setw(16) << fixed << setprecision(2) << student[i].med << endl;
-    }
-}
 
 int main()
 {
+    int n;
     vector<Student> student;
 
     srand(time(NULL));
 
-    int n, whichCycle = 0;
-    bool ifRandom;
-    cout << "Iveskite keik pazymiu tures kiekvienas mokinys" << endl;
-    cin >> n;
-    cout << "Ar ivesite pazymius patys, ar sugeneruoti juos? Jei taip, iveskite 1, jei ne - 0" << endl;
-    cin >> ifRandom;
-    bool cycle = 1;
-    while(cycle != 0)
+    bool ifFileUsed;
+    cout << "Ar duomenys bus gaunami is failo ar vedami ranka?  Jei is failo, iveskite 1, jei ne - 0" << endl;
+    cin >> ifFileUsed;
+    cout << "Duomeyns gaunami is failo bus spausdinami faile rezultatai.txt" << endl;
+
+    if(ifFileUsed == 0)
     {
-        addData(student, n, ifRandom);
-        student[whichCycle].vid = vidCalc(student[whichCycle].hw, student[whichCycle].exam, n);
-        student[whichCycle].med = medCalc(student[whichCycle].hw, student[whichCycle].exam, n);
-        cout << "Jeigu norite susdabdyti vedima, iveskite 0" << endl;
-        cout << "Jeigu norite vesti daugiau duomenu, iveskite 1" << endl;
-        cin >> cycle;
-        whichCycle++;
+        cout << "Iveskite kiek pazymiu tures kiekvienas mokinys" << endl;
+        cin >> n;
+        bool ifRandom;
+        cout << "Ar ivesite pazymius patys, ar sugeneruoti juos? Jei taip, iveskite 1, jei ne - 0" << endl;
+        cin >> ifRandom;
+        int whichCycle = 0;
+        bool cycle = 1;
+        while(cycle != 0)
+        {
+            addData(student, n, ifRandom);
+            student[whichCycle].vid = vidCalc(student[whichCycle].hw, student[whichCycle].exam, n);
+            student[whichCycle].med = medCalc(student[whichCycle].hw, student[whichCycle].exam, n);
+            cout << "Jeigu norite susdabdyti vedima, iveskite 0" << endl;
+            cout << "Jeigu norite vesti daugiau duomenu, iveskite 1" << endl;
+            cin >> cycle;
+            whichCycle++;
+        }
     }
-    print(student, n);
+    else
+    {
+        addDataFromFile(student, n);   
+    }
+    print(student, n, ifFileUsed);  
     return 0;
 }
