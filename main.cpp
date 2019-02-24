@@ -2,6 +2,9 @@
 #include <iomanip>
 #include <algorithm>
 #include <vector>
+#include <stdlib.h>
+#include <time.h>
+
 
 using std::cout;
 using std::cin;
@@ -24,7 +27,13 @@ struct Student
     double vid, med;
 };
 
-void addData(vector<Student> &student, int n)
+int generateRandom()
+{
+    int random;
+    random = 9 * rand()/RAND_MAX + 1;
+}
+
+void addData(vector<Student> &student, int n, bool ifRandom)
 {
     student.push_back(Student());
     int k = student.size() - 1;
@@ -33,14 +42,30 @@ void addData(vector<Student> &student, int n)
     cout << "Iveskite mokinio pavarde" << endl;
     cin >> student[k].surname;
     int temp;
-    for(int i = 0; i != n; i++)
+    if(ifRandom == true)
     {
-        cout << "Iveskite " << i+1 << " pazymi" << endl;
-        cin >> temp;
-        student[k].hw.push_back(temp);
+        for(int i = 0; i != n; i++)
+        {
+            cout << "Generuojamas " << i+1 << " pazymys = ";
+            temp = generateRandom();
+            student[k].hw.push_back(temp);
+            cout << temp << endl;
+        }
+        cout << "Generuojamas egzamino pazymys = ";
+        student[k].exam = generateRandom();
+        cout << student[k].exam << endl;
     }
-    cout << "Iveskite egzamino pazymi" << endl;
-    cin >> student[k].exam;
+    else
+    {       
+        for(int i = 0; i != n; i++)
+        {
+            cout << "Iveskite " << i+1 << " pazymi" << endl;
+            cin >> temp;
+            student[k].hw.push_back(temp);
+        }
+        cout << "Iveskite egzamino pazymi" << endl;
+        cin >> student[k].exam;
+    }
 }
 
 double vidCalc(vector<int> hw, int exam, int n)
@@ -87,13 +112,19 @@ void print(vector<Student> &student, int n)
 int main()
 {
     vector<Student> student;
+
+    srand(time(NULL));
+
     int n, whichCycle = 0;
+    bool ifRandom;
     cout << "Iveskite keik pazymiu tures kiekvienas mokinys" << endl;
     cin >> n;
+    cout << "Ar ivesite pazymius patys, ar sugeneruoti juos? Jei taip, iveskite 1, jei ne - 0" << endl;
+    cin >> ifRandom;
     bool cycle = 1;
     while(cycle != 0)
     {
-        addData(student, n);
+        addData(student, n, ifRandom);
         student[whichCycle].vid = vidCalc(student[whichCycle].hw, student[whichCycle].exam, n);
         student[whichCycle].med = medCalc(student[whichCycle].hw, student[whichCycle].exam, n);
         cout << "Jeigu norite susdabdyti vedima, iveskite 0" << endl;
