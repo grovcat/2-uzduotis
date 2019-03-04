@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <fstream>
+#include <chrono>
 
 using std::cout;
 using std::cin;
@@ -21,6 +22,7 @@ using std::setprecision;
 using std::fixed;
 using std::vector;
 using std::string;
+using namespace std::chrono;
 
 struct Student
 {
@@ -29,13 +31,16 @@ struct Student
     vector<int> hw;
     int exam;
     double vid, med;
+    string gb;
 };
 
 int generateRandom();
 double vidCalc(vector<int>, int, int);
-double medCalc(vector<int>, int exam, int n);
+double medCalc(vector<int>, int, int);
 void addData(vector<Student>&, int, bool);
 void addDataFromFile(vector<Student>&, int&);
 void print(vector<Student>&, int, bool);
+bool checkIfFileExists();
+void generateFile();
 
 #endif 
