@@ -3,7 +3,7 @@
 int main()
 {
     int n;
-    vector<Student> student;
+    deque<Student> student;
     srand(time(NULL));
 
     //Time spent counting variable
@@ -16,22 +16,34 @@ int main()
     cout << "Duomeyns gaunami is failo bus spausdinami faile rezultatai.txt" << endl;
 
     //Checks the users input on file usage and if a data file exists
-    if(checkIfFileExists() == 0 && ifFileUsed == 1);
+    if(ifFileUsed == 1)
     {
         //Asks if the user wants to make a data file using RNG
-        cout << "Neegzistuoja pradinis failas kursiokai.txt" << endl
-             << "Ar generuoti duomenu faila?" << endl
-             << "Jei taip, iveskite 1, jei ne - 0. Pasirenkant 0 programa stabdys veikla" << endl;
-        bool temp;
-        cin >> temp;
-        if(temp == 1)
+        if(checkIfFileExists() == 0)
         {
-            start = high_resolution_clock::now();
-            generateFile();
+            cout << "Neegzistuoja pradinis failas kursiokai.txt" << endl
+                 << "Ar generuoti duomenu faila?" << endl
+                 << "Jei taip, iveskite 1, jei ne - 0. Pasirenkant 0 programa stabdys veikla" << endl;
+            bool temp;
+            cin >> temp;
+            if(temp == 1)
+            {
+                start = high_resolution_clock::now();
+                generateFile();
+            }
+            else
+            {
+                return 0;
+            }
+        }  
+        try
+        {
+            addDataFromFile(student, n);   
         }
-        else
+        catch(const char* msg)
         {
-            return 0;
+            std::cerr << msg << endl;
+            return 1;
         }
     }
     
@@ -56,19 +68,6 @@ int main()
             cout << "Jeigu norite vesti daugiau duomenu, iveskite 1" << endl;
             cin >> cycle;
             whichCycle++;
-        }
-    }
-    else
-    {
-        //Adds data from the file while checking if the data file exists
-        try
-        {
-            addDataFromFile(student, n);   
-        }
-        catch(const char* msg)
-        {
-            std::cerr << msg << endl;
-            return 1;
         }
     }
 

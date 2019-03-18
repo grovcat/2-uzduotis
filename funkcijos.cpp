@@ -1,5 +1,10 @@
 #include "funk.h"
 
+bool compare(Student& x, Student& y)
+{
+    return x.name < y.name;
+}
+
 //Checks if the data file "kursiokai.txt" exists for a failsafe
 bool checkIfFileExists()
 {
@@ -12,6 +17,7 @@ bool checkIfFileExists()
     {
         return 1; //If the file exists, returns a true bool value
     }
+    fd.close();
 }
 
 //Basic function for generating a grade
@@ -25,26 +31,23 @@ int generateRandom()
 void generateFile()
 {
     std::ofstream fd("kursiokai.txt");
-    int mokiniai = 100000;
-    int n = 10;
 
-    //Code disabled for counting how much time does a program take to complete the task since 
-
-    // int mokiniai;
-    // cout << "Kiek mokiniu reikia sugeneruoti?" << endl;
-    // cin >> mokiniai;
-    // while(mokiniai < 0) //Waits for the user to enter a valid value for the amount students
-    // {
-    //     cout << "Iveskite teisinga reiksme!" << endl;
-    //     cin >> mokiniai;
-    // }
-    // int n;
-    // cout << "Kiek pazymiu tures kiekvienas mokinys?" << endl;
-    // while(n < 0) // Waits for the user to enter a valid value for the amount of grades each student has
-    // {
-    //     cout << "Iveskite teisinga reiksme!" << endl;
-    //     cin >> n;
-    // }
+    int mokiniai;
+    cout << "Kiek mokiniu reikia sugeneruoti?" << endl;
+    cin >> mokiniai;
+    while(mokiniai < 0) //Waits for the user to enter a valid value for the amount students
+    {
+        cout << "Iveskite teisinga reiksme!" << endl;
+        cin >> mokiniai;
+    }
+    int n;
+    cout << "Kiek pazymiu tures kiekvienas mokinys?" << endl;
+    cin >> n;
+    while(n < 0) // Waits for the user to enter a valid value for the amount of grades each student has
+    {
+        cout << "Iveskite teisinga reiksme!" << endl;
+        cin >> n;
+    }
     
     //Writes the first line of the data file
     fd << left << setw(15) << "Vardas" << left << setw(20) << "Pavarde";
@@ -71,7 +74,7 @@ void generateFile()
 }
 
 //Counts the average value of a student
-double vidCalc(vector<int> hw, int exam, int n)
+double vidCalc(deque<int> hw, int exam, int n)
 {
     int temp = 0;
     for(int i = 0; i != n; i++)
@@ -82,7 +85,7 @@ double vidCalc(vector<int> hw, int exam, int n)
 }
 
 //Counts the median value of a student
-double medCalc(vector<int> hw, int exam, int n)
+double medCalc(deque<int> hw, int exam, int n)
 {
     sort(hw.begin(), hw.end());
     if(n % 2 == 1)
@@ -96,7 +99,7 @@ double medCalc(vector<int> hw, int exam, int n)
 }
 
 //Adds data from the user via console
-void addData(vector<Student> &student, int n, bool ifRandom)
+void addData(deque<Student> &student, int n, bool ifRandom)
 {
     student.push_back(Student());
     int k = student.size() - 1;
@@ -136,7 +139,7 @@ void addData(vector<Student> &student, int n, bool ifRandom)
 }
 
 //Function responsible for adding data from a file into the memory (struct)
-void addDataFromFile(vector<Student> &student, int &n)
+void addDataFromFile(deque<Student> &student, int &n)
 {
     std::ifstream fd("kursiokai.txt");
     
@@ -180,8 +183,10 @@ void addDataFromFile(vector<Student> &student, int &n)
 }
 
 //Function responsible for printing out the result
-void print(vector<Student> &student, int n, bool ifFileUsed)
+void print(deque<Student> &student, int n, bool ifFileUsed)
 {
+    
+    sort(student.begin(), student.end(), compare);
     //The variable k holds the info for the number of students in the memory
     int k = student.size(); 
 

@@ -9,6 +9,7 @@
 #include <time.h>
 #include <fstream>
 #include <chrono>
+#include <deque>
 
 using std::cout;
 using std::cin;
@@ -23,23 +24,24 @@ using std::fixed;
 using std::vector;
 using std::string;
 using namespace std::chrono;
+using std::deque;
 
 struct Student
 {
     string name;
     string surname;
-    vector<int> hw;
+    deque<int> hw;
     int exam;
     double vid, med;
     string gb;
 };
 
 int generateRandom();
-double vidCalc(vector<int>, int, int);
-double medCalc(vector<int>, int, int);
-void addData(vector<Student>&, int, bool);
-void addDataFromFile(vector<Student>&, int&);
-void print(vector<Student>&, int, bool);
+double vidCalc(deque<int>, int, int);
+double medCalc(deque<int>, int, int);
+void addData(deque<Student>&, int, bool);
+void addDataFromFile(deque<Student>&, int&);
+void print(deque<Student>&, int, bool);
 bool checkIfFileExists();
 void generateFile();
 
