@@ -1,5 +1,10 @@
 #include "funk.h"
 
+bool compare(Student& x, Student& y)
+{
+    return x.name < y.name;
+}
+
 //Checks if the data file "kursiokai.txt" exists for a failsafe
 bool checkIfFileExists()
 {
@@ -25,26 +30,23 @@ int generateRandom()
 void generateFile()
 {
     std::ofstream fd("kursiokai.txt");
-    int mokiniai = 100000;
-    int n = 10;
 
-    //Code disabled for counting how much time does a program take to complete the task since 
-
-    // int mokiniai;
-    // cout << "Kiek mokiniu reikia sugeneruoti?" << endl;
-    // cin >> mokiniai;
-    // while(mokiniai < 0) //Waits for the user to enter a valid value for the amount students
-    // {
-    //     cout << "Iveskite teisinga reiksme!" << endl;
-    //     cin >> mokiniai;
-    // }
-    // int n;
-    // cout << "Kiek pazymiu tures kiekvienas mokinys?" << endl;
-    // while(n < 0) // Waits for the user to enter a valid value for the amount of grades each student has
-    // {
-    //     cout << "Iveskite teisinga reiksme!" << endl;
-    //     cin >> n;
-    // }
+    int mokiniai;
+    cout << "Kiek mokiniu reikia sugeneruoti?" << endl;
+    cin >> mokiniai;
+    while(mokiniai < 0) //Waits for the user to enter a valid value for the amount students
+    {
+        cout << "Iveskite teisinga reiksme!" << endl;
+        cin >> mokiniai;
+    }
+    int n;
+    cin >> n;
+    cout << "Kiek pazymiu tures kiekvienas mokinys?" << endl;
+    while(n < 0) // Waits for the user to enter a valid value for the amount of grades each student has
+    {
+        cout << "Iveskite teisinga reiksme!" << endl;
+        cin >> n;
+    }
     
     //Writes the first line of the data file
     fd << left << setw(15) << "Vardas" << left << setw(20) << "Pavarde";
@@ -182,6 +184,8 @@ void addDataFromFile(vector<Student> &student, int &n)
 //Function responsible for printing out the result
 void print(vector<Student> &student, int n, bool ifFileUsed)
 {
+    
+    sort(student.begin(), student.end(), compare);
     //The variable k holds the info for the number of students in the memory
     int k = student.size(); 
 

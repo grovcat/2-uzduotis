@@ -34,6 +34,7 @@ struct Student
     string gb;
 };
 
+bool compare(Student&, Student&);
 int generateRandom();
 double vidCalc(vector<int>, int, int);
 double medCalc(vector<int>, int, int);
