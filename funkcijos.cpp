@@ -139,7 +139,7 @@ void addData(deque<Student> &student, int n, bool ifRandom)
 }
 
 //Function responsible for adding data from a file into the memory (struct)
-void addDataFromFile(deque<Student> &student, int &n)
+void addDataFromFile(deque<Student> &student, deque<Student> &Good, deque<Student> &Bad, int &n)
 {
     std::ifstream fd("kursiokai.txt");
     
@@ -155,6 +155,8 @@ void addDataFromFile(deque<Student> &student, int &n)
     n = (temp.size() - 44) / 5;
 
     int k = 0;
+    int g = 0;
+    int b = 0;
     int tempMark;
     //Runs a loop until it checks if it reached the end of the file
     while(fd.peek() != EOF)
@@ -171,11 +173,21 @@ void addDataFromFile(deque<Student> &student, int &n)
         student[k].med = medCalc(student[k].hw, student[k].exam, n);
         if(student[k].vid < 5)
         {
-            student[k].gb = "Bad";
+            Bad.push_back(Student());
+            Bad[b].name = student[k].name;
+            Bad[b].surname = student[k].surname;
+            Bad[b].vid = student[k].vid;
+            Bad[b].med = student[k].med;
+            b++;
         }
         else
         {
-            student[k].gb = "Good";
+            Good.push_back(Student());
+            Good[g].name = student[k].name;
+            Good[g].surname = student[k].surname;
+            Good[g].vid = student[k].vid;
+            Good[g].med = student[k].med;
+            g++;
         }
         //The variable k is used to put the students info on the next group inside the struct vector
         k++;
@@ -183,12 +195,17 @@ void addDataFromFile(deque<Student> &student, int &n)
 }
 
 //Function responsible for printing out the result
-void print(deque<Student> &student, int n, bool ifFileUsed)
+void print(deque<Student> &student, deque<Student> &Good, deque<Student> &Bad, int n, bool ifFileUsed)
 {
     
     sort(student.begin(), student.end(), compare);
+    sort(Good.begin(), Good.end(), compare);
+    sort(Bad.begin(), Bad.end(), compare);
+
     //The variable k holds the info for the number of students in the memory
     int k = student.size(); 
+    int g = Good.size();
+    int b = Bad.size();
 
     //Checks if the used requested to use files for the program, if not console printing for the result is used
     if(ifFileUsed == false)
@@ -227,22 +244,20 @@ void print(deque<Student> &student, int n, bool ifFileUsed)
         resultGood << endl;
         resultBad << endl;
         
-        for(int i = 0; i != k - 1; i++)
+
+        //Checks if the student has a good mark (the average is above 5)
+        for(int i = 0; i != g; i++)
         {
-            //Checks if the student has a good mark (the average is above 5)
-            if(student[i].gb == "Good")
-            {
-                resultGood << left << setw(15) << student[i].name << left << setw(20) << student[i].surname;
-                resultGood << left << setw(19) << fixed << setprecision(2) << student[i].vid;
-                resultGood << left << setw(16) << fixed << setprecision(2) << student[i].med << endl;
-            }
-            else
-            {
-                resultBad << left << setw(15) << student[i].name << left << setw(20) << student[i].surname;
-                resultBad << left << setw(19) << fixed << setprecision(2) << student[i].vid;
-                resultBad << left << setw(16) << fixed << setprecision(2) << student[i].med << endl;
-            }
+            resultGood << left << setw(15) << Good[i].name << left << setw(20) << Good[i].surname; 
+            resultGood << left << setw(19) << fixed << setprecision(2) << Good[i].vid;
+            resultGood << left << setw(16) << fixed << setprecision(2) << Good[i].med << endl;
         }
+        for(int i = 0; i != b; i++)
+        {
+            resultBad << left << setw(15) << Bad[i].name << left << setw(20) << Bad[i].surname;
+            resultBad << left << setw(19) << fixed << setprecision(2) << Bad[i].vid;
+            resultBad << left << setw(16) << fixed << setprecision(2) << Bad[i].med << endl;
+        }        
     }
 
     //Prints out the completed function text
