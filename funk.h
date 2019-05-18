@@ -31,16 +31,16 @@ struct Student
     vector<int> hw;
     int exam;
     double vid, med;
-    string gb;
 };
 
 bool compare(Student&, Student&);
+bool checkIfInt(string);
 int generateRandom();
 double vidCalc(vector<int>, int, int);
 double medCalc(vector<int>, int, int);
 void addData(vector<Student>&, int, bool);
-void addDataFromFile(vector<Student>&, int&);
-void print(vector<Student>&, int, bool);
+void addDataFromFile(vector<Student>&, vector<Student>&, vector<Student>&, int&);
+void print(vector<Student>&, vector<Student>&, vector<Student>&, int, bool);
 bool checkIfFileExists();
 void generateFile();
 

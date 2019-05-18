@@ -4,6 +4,8 @@ int main()
 {
     int n;
     vector<Student> student;
+    vector<Student> good;
+    vector<Student> bad;
     srand(time(NULL));
 
     //Time spent counting variable
@@ -13,6 +15,11 @@ int main()
     bool ifFileUsed;
     cout << "Ar duomenys bus gaunami is failo ar vedami ranka?  Jei is failo, iveskite 1, jei ne - 0" << endl;
     cin >> ifFileUsed;
+    while(ifFileUsed != 1 && ifFileUsed != 0)
+    {
+        cout << "Iveskite teisinga reiksme!" << endl;
+        cin >> ifFileUsed;
+    }
     cout << "Duomeyns gaunami is failo bus spausdinami faile rezultatai.txt" << endl;
 
     //Checks the users input on file usage and if a data file exists
@@ -26,9 +33,13 @@ int main()
                 << "Jei taip, iveskite 1, jei ne - 0. Pasirenkant 0 programa stabdys veikla" << endl;
             bool temp;
             cin >> temp;
+            while(temp != 1 && temp != 0)
+            {
+                cout << "Iveskite teisinga reiksme!" << endl;
+                cin >> temp;
+            }
             if(temp == 1)
             {
-                start = high_resolution_clock::now();
                 generateFile();
             }
             else
@@ -39,7 +50,8 @@ int main()
         //Adds data from the file while checking if the data file exists
         try
         {
-            addDataFromFile(student, n);   
+            start = high_resolution_clock::now();
+            addDataFromFile(student, good, bad, n);   
         }
         catch(const char* msg)
         {
@@ -56,6 +68,11 @@ int main()
         bool ifRandom;
         cout << "Ar ivesite pazymius patys, ar sugeneruoti juos? Jei taip, iveskite 1, jei ne - 0" << endl;
         cin >> ifRandom;
+        while(ifRandom != 1 && ifRandom != 0)
+        {
+            cout << "Iveskite teisinga reiksme!" << endl;
+            cin >> ifRandom;
+        }
         int whichCycle = 0;
         bool cycle = 1;
 
@@ -68,12 +85,17 @@ int main()
             cout << "Jeigu norite susdabdyti vedima, iveskite 0" << endl;
             cout << "Jeigu norite vesti daugiau duomenu, iveskite 1" << endl;
             cin >> cycle;
+            while(cycle != 1 && cycle != 0)
+            {
+                cout << "Iveskite teisinga reiksme!" << endl;
+                cin >> cycle;
+            }
             whichCycle++;
         }
     }
 
     //Runs the print function
-    print(student, n, ifFileUsed); 
+    print(student, good, bad, n, ifFileUsed); 
 
     //Counts how much time did the program run for 
     auto end = high_resolution_clock::now();
