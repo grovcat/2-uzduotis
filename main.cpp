@@ -5,6 +5,8 @@ int main()
     int n;
     //vector<Student> student;
     list<Student> student; 
+    list<Student> good;
+    list<Student> bad;
     srand(time(NULL));
 
     //Time spent counting variable
@@ -41,7 +43,7 @@ int main()
         try
         {
             start = high_resolution_clock::now();
-            addDataFromFile(student, n);   
+            addDataFromFile(student, good, bad, n);   
         }
         catch(const char* msg)
         {
@@ -75,7 +77,7 @@ int main()
     }
 
     //Runs the print function
-    print(student, n, ifFileUsed); 
+    print(student, good, bad, n, ifFileUsed); 
 
     //Counts how much time did the program run for 
     auto end = high_resolution_clock::now();

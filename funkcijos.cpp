@@ -144,7 +144,7 @@ double medCalc(list<int> hw, int exam, int n)
 // }
 
 //Function responsible for adding data from a file into the memory (struct)
-void addDataFromFile(list<Student> &student, int &n)
+void addDataFromFile(list<Student> &student, list<Student> &Good, list<Student> &Bad, int &n)
 {
     std::ifstream fd("kursiokai.txt");
     
@@ -163,6 +163,8 @@ void addDataFromFile(list<Student> &student, int &n)
     int tempMark;
 
     list<Student>::iterator it = student.end();
+    list<Student>::iterator G = Good.end();
+    list<Student>::iterator B = Bad.end();
     string tempname, tempsurname;
     int tempexam;
     //Runs a loop until it checks if it reached the end of the file
@@ -184,11 +186,23 @@ void addDataFromFile(list<Student> &student, int &n)
         it->med = medCalc(it->hw, it->exam, n);
         if(it->vid < 5)
         {
-            it->gb = "Bad";
+            Bad.push_back(Student());
+            B--;
+            B->name = it->name;
+            B->surname = it->surname;
+            B->vid = it->vid;
+            B->med = it->med;
+            B++;
         }
         else
         {
-            it->gb = "Good";
+            Good.push_back(Student());
+            G--;
+            G->name = it->name;
+            G->surname = it->surname;
+            G->vid = it->vid;
+            G->med = it->med;
+            G++;
         }
         //The variable k is used to put the students info on the next group inside the struct vector
         it++;
@@ -196,11 +210,13 @@ void addDataFromFile(list<Student> &student, int &n)
 }
 
 //Function responsible for printing out the result
-void print(list<Student> &student, int n, bool ifFileUsed)
+void print(list<Student> &student, list<Student> &Good, list<Student> &Bad, int n, bool ifFileUsed)
 {
     //Sorting the struct via first name
     //sort(student.begin(), student.end(), compareForSort);
     student.sort(compare);
+    Good.sort(compare);
+    Bad.sort(compare);
 
     //The variable k holds the info for the number of students in the memory
     int k = student.size(); 
@@ -242,21 +258,17 @@ void print(list<Student> &student, int n, bool ifFileUsed)
         resultGood << endl;
         resultBad << endl;
         
-        for(auto & it : student)
+        for(auto & G : Good)
         {
-            //Checks if the student has a good mark (the average is above 5)
-            if(it.gb == "Good")
-            {
-                resultGood << left << setw(15) << it.name << left << setw(20) << it.surname;
-                resultGood << left << setw(19) << fixed << setprecision(2) << it.vid;
-                resultGood << left << setw(16) << fixed << setprecision(2) << it.med << endl;
-            }
-            else
-            {
-                resultBad << left << setw(15) << it.name << left << setw(20) << it.surname;
-                resultBad << left << setw(19) << fixed << setprecision(2) << it.vid;
-                resultBad << left << setw(16) << fixed << setprecision(2) << it.med << endl;
-            }
+            resultGood << left << setw(15) << G.name << left << setw(20) << G.surname;
+            resultGood << left << setw(19) << fixed << setprecision(2) << G.vid;
+            resultGood << left << setw(16) << fixed << setprecision(2) << G.med << endl;
+        }
+        for(auto & B : Bad)
+        {
+            resultBad << left << setw(15) << B.name << left << setw(20) << B.surname;
+            resultBad << left << setw(19) << fixed << setprecision(2) << B.vid;
+            resultBad << left << setw(16) << fixed << setprecision(2) << B.med << endl;
         }
     //}
 
