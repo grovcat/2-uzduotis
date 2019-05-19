@@ -2,7 +2,7 @@
 
 bool compare(Student& x, Student& y)
 {
-    return x.name < y.name;
+    return x.vid < y.vid;
 }
 
 //Checks if the data file "kursiokai.txt" exists for a failsafe
@@ -139,7 +139,7 @@ void addData(deque<Student> &student, int n, bool ifRandom)
 }
 
 //Function responsible for adding data from a file into the memory (struct)
-void addDataFromFile(deque<Student> &student, deque<Student> &Good, deque<Student> &Bad, int &n)
+void addDataFromFile(deque<Student> &student, deque<Student> &Bad, int &n)
 {
     std::ifstream fd("kursiokai.txt");
     
@@ -155,7 +155,6 @@ void addDataFromFile(deque<Student> &student, deque<Student> &Good, deque<Studen
     n = (temp.size() - 44) / 5;
 
     int k = 0;
-    int g = 0;
     int b = 0;
     int tempMark;
     //Runs a loop until it checks if it reached the end of the file
@@ -173,38 +172,22 @@ void addDataFromFile(deque<Student> &student, deque<Student> &Good, deque<Studen
         student[k].med = medCalc(student[k].hw, student[k].exam, n);
         if(student[k].vid < 5)
         {
-            Bad.push_back(Student());
-            Bad[b].name = student[k].name;
-            Bad[b].surname = student[k].surname;
-            Bad[b].vid = student[k].vid;
-            Bad[b].med = student[k].med;
-            b++;
+            Bad.push_back(student[k]);
+            student.erase(student.begin()+k);
         }
         else
         {
-            Good.push_back(Student());
-            Good[g].name = student[k].name;
-            Good[g].surname = student[k].surname;
-            Good[g].vid = student[k].vid;
-            Good[g].med = student[k].med;
-            g++;
+            ++k;
         }
-        //The variable k is used to put the students info on the next group inside the struct vector
-        k++;
     }
 }
 
 //Function responsible for printing out the result
-void print(deque<Student> &student, deque<Student> &Good, deque<Student> &Bad, int n, bool ifFileUsed)
+void print(deque<Student> &student, deque<Student> &Bad, int n, bool ifFileUsed)
 {
-    
-    sort(student.begin(), student.end(), compare);
-    sort(Good.begin(), Good.end(), compare);
-    sort(Bad.begin(), Bad.end(), compare);
 
     //The variable k holds the info for the number of students in the memory
     int k = student.size(); 
-    int g = Good.size();
     int b = Bad.size();
 
     //Checks if the used requested to use files for the program, if not console printing for the result is used
@@ -226,6 +209,9 @@ void print(deque<Student> &student, deque<Student> &Good, deque<Student> &Bad, i
     }  
     else
     {
+        sort(Bad.begin(), Bad.end(), compare);
+        sort(student.begin(), student.end(), compare);
+        
         //Creates 2 output files for 2 different groups of students
         std::ofstream resultGood("rezultatai-good.txt");
         std::ofstream resultBad("rezultatai-bad.txt");
@@ -244,13 +230,11 @@ void print(deque<Student> &student, deque<Student> &Good, deque<Student> &Bad, i
         resultGood << endl;
         resultBad << endl;
         
-
-        //Checks if the student has a good mark (the average is above 5)
-        for(int i = 0; i != g; i++)
+        for(int i = 0; i != k; i++)
         {
-            resultGood << left << setw(15) << Good[i].name << left << setw(20) << Good[i].surname; 
-            resultGood << left << setw(19) << fixed << setprecision(2) << Good[i].vid;
-            resultGood << left << setw(16) << fixed << setprecision(2) << Good[i].med << endl;
+            resultGood << left << setw(15) << student[i].name << left << setw(20) << student[i].surname; 
+            resultGood << left << setw(19) << fixed << setprecision(2) << student[i].vid;
+            resultGood << left << setw(16) << fixed << setprecision(2) << student[i].med << endl;
         }
         for(int i = 0; i != b; i++)
         {

@@ -4,7 +4,6 @@ int main()
 {
     int n;
     deque<Student> student;
-    deque<Student> good;
     deque<Student> bad;
     srand(time(NULL));
 
@@ -40,7 +39,7 @@ int main()
         }  
         try
         {
-            addDataFromFile(student, good, bad, n);   
+            addDataFromFile(student, bad, n);   
         }
         catch(const char* msg)
         {
@@ -63,7 +62,7 @@ int main()
         //Runs the cycle until the user says otherwise
         while(cycle != 0)
         {
-            addData(student, good, bad, n, ifRandom);
+            addData(student, n, ifRandom);
             student[whichCycle].vid = vidCalc(student[whichCycle].hw, student[whichCycle].exam, n);
             student[whichCycle].med = medCalc(student[whichCycle].hw, student[whichCycle].exam, n);
             cout << "Jeigu norite susdabdyti vedima, iveskite 0" << endl;
@@ -74,7 +73,7 @@ int main()
     }
 
     //Runs the print function
-    print(student, good, bad, n, ifFileUsed); 
+    print(student, bad, n, ifFileUsed); 
 
     //Counts how much time did the program run for 
     auto end = high_resolution_clock::now();

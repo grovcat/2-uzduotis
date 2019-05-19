@@ -38,9 +38,9 @@ struct Student
 int generateRandom();
 double vidCalc(deque<int>, int, int);
 double medCalc(deque<int>, int, int);
-void addData(deque<Student>&, deque<Student>&, deque<Student>&, int, bool);
-void addDataFromFile(deque<Student>&,deque<Student>&, deque<Student>&,  int&);
-void print(deque<Student>&,deque<Student>&, deque<Student>&,  int, bool);
+void addData(deque<Student>&, int, bool);
+void addDataFromFile(deque<Student>&, deque<Student>&,  int&);
+void print(deque<Student>&,deque<Student>&, int, bool);
 bool checkIfFileExists();
 void generateFile();
 
