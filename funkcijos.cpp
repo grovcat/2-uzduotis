@@ -3,7 +3,7 @@
 //Checks if the first name is lower than the second one. Used for sort
 bool compare(const Student& x, const Student& y)
 {
-    return x.name < y.name;
+    return x.vid < y.vid;
 }
 
 //Checks if the data file "kursiokai.txt" exists for a failsafe
@@ -144,7 +144,7 @@ double medCalc(list<int> hw, int exam, int n)
 // }
 
 //Function responsible for adding data from a file into the memory (struct)
-void addDataFromFile(list<Student> &student, list<Student> &Good, list<Student> &Bad, int &n)
+void addDataFromFile(list<Student> &student, list<Student> &Bad, int &n)
 {
     std::ifstream fd("kursiokai.txt");
     
@@ -163,7 +163,6 @@ void addDataFromFile(list<Student> &student, list<Student> &Good, list<Student> 
     int tempMark;
 
     list<Student>::iterator it = student.end();
-    list<Student>::iterator G = Good.end();
     list<Student>::iterator B = Bad.end();
     string tempname, tempsurname;
     int tempexam;
@@ -193,29 +192,23 @@ void addDataFromFile(list<Student> &student, list<Student> &Good, list<Student> 
             B->vid = it->vid;
             B->med = it->med;
             B++;
+            it = student.erase(it);
         }
         else
         {
-            Good.push_back(Student());
-            G--;
-            G->name = it->name;
-            G->surname = it->surname;
-            G->vid = it->vid;
-            G->med = it->med;
-            G++;
+            it++;
         }
-        //The variable k is used to put the students info on the next group inside the struct vector
-        it++;
+
     }
+    cout << "xd";
 }
 
 //Function responsible for printing out the result
-void print(list<Student> &student, list<Student> &Good, list<Student> &Bad, int n, bool ifFileUsed)
+void print(list<Student> &student, list<Student> &Bad, int n, bool ifFileUsed)
 {
     //Sorting the struct via first name
     //sort(student.begin(), student.end(), compareForSort);
     student.sort(compare);
-    Good.sort(compare);
     Bad.sort(compare);
 
     //The variable k holds the info for the number of students in the memory
@@ -258,7 +251,7 @@ void print(list<Student> &student, list<Student> &Good, list<Student> &Bad, int 
         resultGood << endl;
         resultBad << endl;
         
-        for(auto & G : Good)
+        for(auto & G : student)
         {
             resultGood << left << setw(15) << G.name << left << setw(20) << G.surname;
             resultGood << left << setw(19) << fixed << setprecision(2) << G.vid;

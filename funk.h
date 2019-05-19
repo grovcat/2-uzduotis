@@ -39,9 +39,9 @@ bool compare(const Student&, const Student&);
 int generateRandom();
 double vidCalc(list<int>, int, int);
 double medCalc(list<int>, int, int);
-void addData(list<Student>&, list<Student>&, list<Student>&, int, bool);
-void addDataFromFile(list<Student>&, list<Student>&, list<Student>&, int&);
-void print(list<Student>&, list<Student>&, list<Student>&, int, bool);
+void addData(list<Student>&, int, bool);
+void addDataFromFile(list<Student>&, list<Student>&, int&);
+void print(list<Student>&, list<Student>&, int, bool);
 bool checkIfFileExists();
 void generateFile();
 
