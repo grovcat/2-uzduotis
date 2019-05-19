@@ -4,7 +4,6 @@ int main()
 {
     int n;
     vector<Student> student;
-    vector<Student> good;
     vector<Student> bad;
     srand(time(NULL));
 
@@ -51,11 +50,11 @@ int main()
         try
         {
             start = high_resolution_clock::now();
-            addDataFromFile(student, good, bad, n);   
+            addDataFromFile(student, bad, n);   
         }
         catch(const char* msg)
         {
-            std::cerr << msg << endl;
+            std::cerr << msg << endl; 
             return 1;
         }
     }
@@ -95,7 +94,7 @@ int main()
     }
 
     //Runs the print function
-    print(student, good, bad, n, ifFileUsed); 
+    print(student, bad, n, ifFileUsed); 
 
     //Counts how much time did the program run for 
     auto end = high_resolution_clock::now();

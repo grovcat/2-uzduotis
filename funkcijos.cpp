@@ -177,7 +177,7 @@ void addData(vector<Student> &student, int n, bool ifRandom)
 }
 
 //Function responsible for adding data from a file into the memory (struct)
-void addDataFromFile(vector<Student> &student, vector<Student> &good, vector<Student> &bad, int &n)
+void addDataFromFile(vector<Student> &student, vector<Student> &bad, int &n)
 {
     std::ifstream fd("kursiokai.txt");
     
@@ -189,21 +189,18 @@ void addDataFromFile(vector<Student> &student, vector<Student> &good, vector<Stu
     
     //Takes the first line of the file to count how many marks are there based on the amount of characters the marks take up
     string temp;
+    int tempInt;
     std::getline(fd, temp);
     n = (temp.size() - 44) / 5;
 
-    int k = 0;
-    int g = 0; 
+    int k = 0; 
     int b = 0;
     string tempMark;
     //Runs a loop until it checks if it reached the end of the file
     while(fd.peek() != EOF)
     {
         student.push_back(Student());
-        good.push_back(Student());
-        bad.push_back(Student());
-        good.reserve(student.capacity());
-        bad.reserve(student.capacity());
+        //bad.reserve(student.capacity());
         fd >> student[k].name >> student[k].surname;
         for(int i = 0; i != n; i++)
         {
@@ -224,45 +221,34 @@ void addDataFromFile(vector<Student> &student, vector<Student> &good, vector<Stu
         student[k].med = medCalc(student[k].hw, student[k].exam, n);
         if(student[k].vid < 5)
         {
-            bad[b].name = student[k].name;
-            bad[b].surname = student[k].surname;
-            for(int i = 0; i != n; i++)
-            {
-                tempMark = student[k].hw[i];
-                bad[b].hw.push_back(std::stoi(tempMark));
-            }
-            bad[b].vid = student[k].vid;
-            bad[b].med = student[k].med;
-            b++;
-        }
-        else
-        {
-            good[g].name = student[k].name;
-            good[g].surname = student[k].surname;
-            for(int i = 0; i != n; i++)
-            {
-                tempMark = student[k].hw[i];
-                good[g].hw.push_back(std::stoi(tempMark));
-            }
-            good[g].vid = student[k].vid;
-            good[g].med = student[k].med;
-            g++;
+            // bad[b].name = student[k].name;
+            // bad[b].surname = student[k].surname;
+            // for(int i = 0; i != n; i++)
+            // {
+            //     tempInt = student[k].hw[i];
+            //     bad[b].hw.push_back(tempInt);
+            // }
+            // bad[b].vid = student[k].vid;
+            // bad[b].med = student[k].med;
+            // b++;
+            bad.push_back(student[k]);
+            student.erase(student.begin()+k);
         }
         //The variable k is used to put the students info on the next group inside the struct vector
-        k++;
+        else
+        {
+            ++k;
+        }
     }
-    good.shrink_to_fit();
     bad.shrink_to_fit();
 }
 
 //Function responsible for printing out the result
-void print(vector<Student> &student, vector<Student> &good, vector<Student> &bad, int n, bool ifFileUsed)
+void print(vector<Student> &student, vector<Student> &good, int n, bool ifFileUsed)
 {
-    
     //The variable k holds the info for the number of students in the memory
     int k = student.size(); 
     int g = good.size();
-    int b = bad.size();
     //Checks if the used requested to use files for the program, if not console printing for the result is used
     if(ifFileUsed == false)
     {
@@ -284,8 +270,8 @@ void print(vector<Student> &student, vector<Student> &good, vector<Student> &bad
     else
     {
         sort(good.begin(), good.end(), compare);
-        sort(bad.begin(), bad.end(), compare);
-        
+        sort(student.begin(), student.end(), compare);
+
         //Creates 2 output files for 2 different groups of students
         std::ofstream resultGood("rezultatai-good.txt");
         std::ofstream resultBad("rezultatai-bad.txt");
@@ -311,14 +297,14 @@ void print(vector<Student> &student, vector<Student> &good, vector<Student> &bad
             resultGood << left << setw(19) << fixed << setprecision(2) << good[i].vid;
             resultGood << left << setw(16) << fixed << setprecision(2) << good[i].med << endl;
         }    
-        for(int i = 0; i != b; i++)
+        for(int i = 0; i != k; i++)
         {
-            resultBad << left << setw(15) << bad[i].name << left << setw(20) << bad[i].surname;
-            resultBad << left << setw(19) << fixed << setprecision(2) << bad[i].vid;
-            resultBad << left << setw(16) << fixed << setprecision(2) << bad[i].med << endl;
+            resultBad << left << setw(15) << student[i].name << left << setw(20) << student[i].surname;
+            resultBad << left << setw(19) << fixed << setprecision(2) << student[i].vid;
+            resultBad << left << setw(16) << fixed << setprecision(2) << student[i].med << endl;
         }
     }
     
     //Prints out the completed function text
-    cout << "Rezultatas isspausdinas" << endl;
+    cout << "Rezultatas isspausdintas" << endl;
 }
