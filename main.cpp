@@ -4,6 +4,7 @@ int main()
 {
     int n;
     deque<Student> student;
+    deque<Student> good;
     deque<Student> bad;
     srand(time(NULL));
 
@@ -39,7 +40,7 @@ int main()
         }  
         try
         {
-            addDataFromFile(student, bad, n);   
+            addDataFromFile(student, good, bad, n);   
         }
         catch(const char* msg)
         {
@@ -73,7 +74,7 @@ int main()
     }
 
     //Runs the print function
-    print(student, bad, n, ifFileUsed); 
+    print(student, good, bad, n, ifFileUsed); 
 
     //Counts how much time did the program run for 
     auto end = high_resolution_clock::now();
