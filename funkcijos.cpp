@@ -200,8 +200,6 @@ void addDataFromFile(vector<Student> &student, vector<Student> &good, vector<Stu
     while(fd.peek() != EOF)
     {
         student.push_back(Student());
-        good.push_back(Student());
-        bad.push_back(Student());
         good.reserve(student.capacity());
         bad.reserve(student.capacity());
         fd >> student[k].name >> student[k].surname;
@@ -224,29 +222,31 @@ void addDataFromFile(vector<Student> &student, vector<Student> &good, vector<Stu
         student[k].med = medCalc(student[k].hw, student[k].exam, n);
         if(student[k].vid < 5)
         {
-            bad[b].name = student[k].name;
-            bad[b].surname = student[k].surname;
-            for(int i = 0; i != n; i++)
-            {
-                tempMark = student[k].hw[i];
-                bad[b].hw.push_back(std::stoi(tempMark));
-            }
-            bad[b].vid = student[k].vid;
-            bad[b].med = student[k].med;
-            b++;
+            // bad[b].name = student[k].name;
+            // bad[b].surname = student[k].surname;
+            // for(int i = 0; i != n; i++)
+            // {
+            //     tempMark = student[k].hw[i];
+            //     bad[b].hw.push_back(tempMark);
+            // }
+            // bad[b].vid = student[k].vid;
+            // bad[b].med = student[k].med;
+            // b++;
+            bad.push_back(student[k]);
         }
         else
         {
-            good[g].name = student[k].name;
-            good[g].surname = student[k].surname;
-            for(int i = 0; i != n; i++)
-            {
-                tempMark = student[k].hw[i];
-                good[g].hw.push_back(std::stoi(tempMark));
-            }
-            good[g].vid = student[k].vid;
-            good[g].med = student[k].med;
-            g++;
+            // good[g].name = student[k].name;
+            // good[g].surname = student[k].surname;
+            // for(int i = 0; i != n; i++)
+            // {
+            //     tempMark = student[k].hw[i];
+            //     good[g].hw.push_back(tempMark);
+            // }
+            // good[g].vid = student[k].vid;
+            // good[g].med = student[k].med;
+            // g++;
+            good.push_back(student[k]);
         }
         //The variable k is used to put the students info on the next group inside the struct vector
         k++;
