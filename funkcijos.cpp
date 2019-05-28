@@ -198,9 +198,7 @@ void addDataFromFile(list<Student> &student, list<Student> &Bad, int &n)
         {
             it++;
         }
-
     }
-    cout << "xd";
 }
 
 //Function responsible for printing out the result
