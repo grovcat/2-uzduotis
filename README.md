@@ -8,7 +8,7 @@ Parsisiunčiant programos versiją (senesnė negu v0.3) pakanka konsolėje, kuri
 
 ### Changelog
 
-# [v1.0.1]()
+# [v1.0.1](https://github.com/grovcat/2-uzduotis/releases/tag/v1.0.1)
 
 **Pakeitimai**
 * Pridėtas CMakeLists.txt failas.
